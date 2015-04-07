@@ -1,6 +1,9 @@
 var Reflux = require('reflux');
 var mui = require('material-ui');
 var Toggle = mui.Toggle;
+var GraphActions = require('../actions/GraphActions.js');
+
+var cuid = require('cuid');
 
 var cuid = require('cuid');
 
@@ -9,7 +12,7 @@ var GraphStore = Reflux.createStore({
   width: 900,
   height: 560,
   color: "Azure",
-  channelName: 'placeholderName',
+  channelName: 'JavaScript',
   circleProperties: [{
     id: 1,
     channelName: 'placeholderName',
@@ -28,7 +31,7 @@ var GraphStore = Reflux.createStore({
   {
     id: 2,//cuid(),
     nodeName: 'sounds',
-    nodeLink: 'http://soundcoud.com',
+    nodeLink: 'https://soundcoud.com',
     x: 1,
     y: 70,
     z: 10,
@@ -40,27 +43,46 @@ var GraphStore = Reflux.createStore({
     x: 10,
     y: 10,
     z: 10,
-  }
-  ],
+  }],
 
   init: function(){
     this.load();
-    // listen to graph actions here
-    // this.listenTo(JobActions.loadJobs, this.load)
-    // this.listenTo(JobActions.createJob, this.onCreate);
-    // this.listenTo(JobActions.editJob, this.onEdit);
+    this.listenTo(GraphActions.loadNodes, this.load)
+    // this.listenTo(GraphActions.addNode, this.XXXX);
+    // this.listenTo(GraphActions.editNode, this.XXXX);
+    // this.listenTo(GraphActions.updateNode, this.XXXX);
+  // 'addNode',
+  // 'editNode',
+  // 'updateNode',
+  // 'loadNodes'
   },
   load: function(){
+    console.log('load function');
     // use this to get the graph data from the database
     // var context = this;
     //   $.ajax({
     //     type: "GET",
-    //     url: '/api/listings',
+    //     url: '/api/channel',
     //   }).done(function(data){
     //       console.log(data);
-    //       _jobs = [data]; //push data to store
-    //       context.trigger(_jobs);
+    //       nodeData = [data]; //push data to store
+    //       context.trigger(_jobs); // ??
     //   });
+
+    // use this to get the graph data from the database
+    var context = this;
+    $.ajax({
+      type: "GET",
+      dataType: 'jsonp',
+      url: 'https://basebranch.herokuapp.com/api/channel/nodes/' + this.channelName,
+    }).then(function(data){
+        console.log(data);
+        nodeData = [data]; //push data to store
+        // context.trigger(_jobs); // ??
+    },function(error){
+      console.log('Error on load\'s GET request');
+      console.error(error);
+    });
   },
   pushChanges: function() {
     // use this to push updates to database

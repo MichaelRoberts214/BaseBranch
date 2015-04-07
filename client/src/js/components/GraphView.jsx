@@ -28,7 +28,8 @@ var GraphView = React.createClass({
   },
   
   // this data is hard coded. refactor to retrieve from GraphStore.jsx
-  _allData: /*GraphStore.nodeData*/dataGenerator.generate(3),
+
+  _allData: /*GraphStore.nodeData*/dataGenerator.generate(GraphStore.nodeData.length),
 
   getData: function(domain) {
     return _.filter(this._allData, this.isInDomain.bind(null, domain));
