@@ -71,7 +71,9 @@ var GraphView = React.createClass({
   render: function() {
     return (
       <div className="left">
-        <svg width={GraphStore.width} height={GraphStore.height} color={GraphStore.color}></svg>
+        <svg width={GraphStore.width} height={GraphStore.height} color={GraphStore.color}>
+          <circle cx="60" cy="60" r="50"/>
+        </svg>
       </div>
     );
   }
