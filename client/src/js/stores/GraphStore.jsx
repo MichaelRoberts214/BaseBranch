@@ -4,10 +4,14 @@ var Toggle = mui.Toggle;
 
 
 var GraphStore = Reflux.createStore({
-  color: "brown",
   width: 900,
   height: 560,
-  channelName: 'placeholderName',
+  color: "Azure",
+  circleProperties: [{
+    id: 1,
+    channelName: 'placeholderName',
+    nodeCoordinates: {'x': 100, 'y': 200, 'r': 60}
+  }],
   init: function(){
     this.load();
     // listen to graph actions here

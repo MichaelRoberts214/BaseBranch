@@ -69,10 +69,15 @@ injectTapEventPlugin();
 var GraphView = React.createClass({
 
   render: function() {
+    var nodeCircles = GraphStore.circleProperties.map(function(result) {
+      return <circle key={result.id} cx={result.nodeCoordinates.x} cy={result.nodeCoordinates.y} r={result.nodeCoordinates.r} stroke="CornflowerBlue" fill="AliceBlue">
+          <text x={result.nodeCoordinates.x} y={result.nodeCoordinates.y} fontFamily="sans-serif" fontSize="10px" fill="black">{result.channelName}</text>
+        </circle>
+      });
     return (
       <div className="left">
-        <svg width={GraphStore.width} height={GraphStore.height} color={GraphStore.color}>
-          <circle cx="60" cy="60" r="50"/>
+        <svg width={GraphStore.width} height={GraphStore.height} fill="Azure">
+          {nodeCircles}
         </svg>
       </div>
     );
