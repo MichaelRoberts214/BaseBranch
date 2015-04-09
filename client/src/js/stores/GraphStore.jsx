@@ -7,6 +7,7 @@ var GraphStore = Reflux.createStore({
   width: 900,
   height: 560,
   color: "Azure",
+  channelName: 'placeholderName',
   circleProperties: [{
     id: 1,
     channelName: 'placeholderName',

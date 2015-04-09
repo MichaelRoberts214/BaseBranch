@@ -7,12 +7,12 @@ var mui = require('material-ui');
 //Components
 var RaisedButton = mui.RaisedButton;
 var NavBar = require('./components/NavBar.jsx');
-
 var GraphBar = require('./components/GraphBar.jsx');
 var GraphSideBar = require('./components/GraphSideBar.jsx');
 var GraphView = require('./components/GraphView.jsx');
 var GraphStore = require('./stores/GraphStore.jsx');
-var Paper = mui.Paper;
+var D3Graph = require('./components/D3Graph.jsx');
+var D3Graph = require('./components/ReactGraph.jsx');
 
 
 injectTapEventPlugin();
