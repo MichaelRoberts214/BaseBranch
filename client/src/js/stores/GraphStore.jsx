@@ -1,11 +1,7 @@
 var Reflux = require('reflux');
 var mui = require('material-ui');
-var Toggle = mui.Toggle;
+var cuid = require('cuid');
 var GraphActions = require('../actions/GraphActions.js');
-
-var cuid = require('cuid');
-
-var cuid = require('cuid');
 
 
 var GraphStore = Reflux.createStore({
@@ -73,14 +69,15 @@ var GraphStore = Reflux.createStore({
     var context = this;
     $.ajax({
       type: "GET",
-      dataType: 'jsonp',
-      url: 'https://basebranch.herokuapp.com/api/channel/nodes/' + this.channelName,
+      dataType: 'json',
+      url: 'http://localhost:8000/api/channel/nodes/1', //+ this.channelName,
     }).then(function(data){
         console.log(data);
-        nodeData = [data]; //push data to store
+        //nodeData = [data]; //push data to store
         // context.trigger(_jobs); // ??
     },function(error){
       console.log('Error on load\'s GET request');
+      console.log('error .log', error);
       console.error(error);
     });
   },
