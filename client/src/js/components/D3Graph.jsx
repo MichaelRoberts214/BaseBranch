@@ -110,6 +110,7 @@ ns._drawPoints = function(el, scales, data, prevScales) {
   text.enter().append("text")
     .attr("x", function(d) { return scales.x(d.x); })
     .attr("y", function(d) { return scales.y(d.y); })
+    .attr('class', 'd3-point')
     .text( function (d) { return d.name; })
     .attr("font-family", "sans-serif")
     .attr("font-size", "20px")
