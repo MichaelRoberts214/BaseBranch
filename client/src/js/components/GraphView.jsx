@@ -2,11 +2,12 @@ var mui = require('material-ui');
 var React = require('react');
 var GraphStore = require('../stores/GraphStore.jsx');
 var Reflux = require('reflux');
-
+var Modal = require('react-modal');
 var d3 = require('d3');
 var AddRemoveDatum = require('./AddRemoveDatum.jsx');
 var dataGenerator = require('./dataGenerator.jsx');
 var ReactGraph = require('./ReactGraph.jsx');
+var NodeView = require('./NodeView.jsx');
 var _ = require('lodash');
 
 
@@ -14,6 +15,11 @@ var injectTapEventPlugin = require("react-tap-event-plugin");
 
 injectTapEventPlugin();
 React.initializeTouchEvents(true);
+
+
+var appElement = document.getElementById('app');
+Modal.setAppElement(appElement);
+Modal.injectCSS();
 
 
 var GraphView = React.createClass({
@@ -27,11 +33,10 @@ var GraphView = React.createClass({
       domain: {x: domain, y: [0, 100]},
       tooltip: null,
       prevDomain: null,
-      showingAllTooltips: false
+      showingAllTooltips: false,
+      modalIsOpen: true
     };
   },
-  
-  // this data is hard coded. refactor to retrieve from GraphStore.jsx
 
   updateData: function(data) {
     // update this.state's data
@@ -49,7 +54,7 @@ var GraphView = React.createClass({
     console.log('state data',this.state.data);
   },
 
-  _allData: /*GraphStore.nodeData*/dataGenerator.generate(/*this.state.data.length),*/GraphStore.nodeData.length),
+  _allData: dataGenerator.generate(GraphStore.nodeData.length),
 
   getData: function(domain) {
     return _.filter(this._allData, this.isInDomain.bind(null, domain));
@@ -71,6 +76,13 @@ var GraphView = React.createClass({
   isInDomain: function(domain, d) {
     return d.x >= domain[0] && d.x <= domain[1];
   },
+
+  openModal: function(){
+    this.setState({modalIsOpen: true});
+  },
+  closeModal: function(){
+    this.setState({modalIsOpen: false});
+  },
     
 
 
@@ -82,6 +94,9 @@ var GraphView = React.createClass({
         <ReactGraph
           appState={this.state}
           setAppState={this.setAppState} />
+        <Modal isOpen={this.state.modalIsOpen}>
+          <button onClick={this.closeModal} className="waves-effect waves-light btn">Close</button>
+        </Modal>
         <AddRemoveDatum
           appState={this.state}
           setAppState={this.setAppState}
