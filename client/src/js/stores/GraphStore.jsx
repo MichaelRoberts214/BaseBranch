@@ -16,68 +16,62 @@ var GraphStore = Reflux.createStore({
   }],
 
   nodeData: [
-  {
-    id: 1,//cuid(),
-    nodeName: 'google',
-    nodeLink: 'http://google.com',
-    x: 20,
-    y: 50,
-    z: 10,
-  },
-  {
-    id: 2,//cuid(),
-    nodeName: 'sounds',
-    nodeLink: 'https://soundcoud.com',
-    x: 1,
-    y: 70,
-    z: 10,
-  },
-  {
-    id: 3,//cuid(),
-    nodeName: 'past fred place',
-    nodeLink: 'http://walmart.com',
-    x: 10,
-    y: 10,
-    z: 10,
-  }],
+    {
+      id: 1,//cuid(),
+      name: 'google',
+      nodeLink: 'http://google.com',
+      x: 20,
+      y: 50,
+      z: 10,
+    },
+    {
+      id: 2,//cuid(),
+      name: 'sounds',
+      nodeLink: 'https://soundcoud.com',
+      x: 1,
+      y: 70,
+      z: 10,
+    },
+    {
+      id: 3,//cuid(),
+      name: 'past fred place',
+      nodeLink: 'http://walmart.com',
+      x: 10,
+      y: 10,
+      z: 10,
+    }
+  ],
 
   init: function(){
     this.load();
     this.listenTo(GraphActions.loadNodes, this.load)
     // this.listenTo(GraphActions.addNode, this.XXXX);
     // this.listenTo(GraphActions.editNode, this.XXXX);
-    // this.listenTo(GraphActions.updateNode, this.XXXX);
+    // this.listenTo(GraphActions.updateNodes, this.XXXX);
   // 'addNode',
   // 'editNode',
-  // 'updateNode',
+  // 'updateNodes',
   // 'loadNodes'
   },
   load: function(){
     console.log('load function');
     // use this to get the graph data from the database
-    // var context = this;
-    //   $.ajax({
-    //     type: "GET",
-    //     url: '/api/channel',
-    //   }).done(function(data){
-    //       console.log(data);
-    //       nodeData = [data]; //push data to store
-    //       context.trigger(_jobs); // ??
-    //   });
-
-    // use this to get the graph data from the database
     var context = this;
     $.ajax({
       type: "GET",
       dataType: 'json',
-      url: 'http://localhost:8000/api/channel/nodes/1', //+ this.channelName,
+      url: 'http://localhost:8000/api/channel/nodes/1', //+ this.channelName, // localhost for local testing
     }).then(function(data){
-        console.log(data);
-        //nodeData = [data]; //push data to store
-        // context.trigger(_jobs); // ??
+        this.nodeData = data; //push data to store
+        for (var i = 0; i < this.nodeData.length; i++) {
+          this.nodeData[i].x = 10 * ( i + 1 );
+          this.nodeData[i].y = 10 * ( i + 1 );
+          this.nodeData[i].z = 10;
+        }
+        context.trigger(data);
     },function(error){
       console.log('Error on load\'s GET request');
-      console.log('error .log', error);
+      console.log('error console.log:', error);
       console.error(error);
     });
   },
@@ -86,6 +80,7 @@ var GraphStore = Reflux.createStore({
     // var context = this;
     // $.ajax({
     //   type: "POST",
+    //   dataType: 'json',
     //   data: _jobs,
     //   url: '/api/listings',
     // }).done(function(data){
