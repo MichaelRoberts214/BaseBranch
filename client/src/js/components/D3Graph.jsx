@@ -2,6 +2,7 @@
 var d3 = require('d3');
 var React = require('react');
 var GraphStore = require('../stores/GraphStore.jsx');
+var ResourceStore = require('../stores/ResourceStore.jsx');
 
 //require('./d3Chart.less');
 
@@ -116,7 +117,7 @@ ns._drawPoints = function(el, scales, data, prevScales) {
     .attr("font-size", "20px")
     .attr("fill", "black")
     .attr("cursor", "pointer")
-    .on("click", function(d) {window.location.href = d.nodeLink;})
+    .on("click", function(d) {/*window.location.href = d.nodeLink;*/ console.log(d); /*ResourceStore.nodeId = ;*/})
     .moveToFront();
 
 
