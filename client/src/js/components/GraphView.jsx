@@ -34,7 +34,7 @@ var GraphView = React.createClass({
       tooltip: null,
       prevDomain: null,
       showingAllTooltips: false,
-      modalIsOpen: true
+      modalIsOpen: false
     };
   },
 
@@ -91,17 +91,19 @@ var GraphView = React.createClass({
     console.log('state', this.state);
     return (
       <div className="left">
+        <button onClick={this.openModal}>asdf</button>
         <ReactGraph
           appState={this.state}
           setAppState={this.setAppState} />
-        <Modal isOpen={this.state.modalIsOpen}>
-          <button onClick={this.closeModal} className="waves-effect waves-light btn">Close</button>
-        </Modal>
         <AddRemoveDatum
           appState={this.state}
           setAppState={this.setAppState}
           addDatum={this.addDatum}
           removeDatum={this.removeDatum} />
+        <Modal isOpen={this.state.modalIsOpen}>
+          <NodeView />
+          <button onClick={this.closeModal} className="waves-effect waves-light btn">Close</button>
+        </Modal>
       </div>
     )
   },
