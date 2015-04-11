@@ -18,7 +18,7 @@ React.initializeTouchEvents(true);
 
 var GraphView = React.createClass({
   
-  mixins: [Reflux.listenTo(GraphStore, 'update')],
+  mixins: [Reflux.listenTo(GraphStore, 'updateData')],
 
   getInitialState: function() {
     var domain = [0, 30];
@@ -33,7 +33,7 @@ var GraphView = React.createClass({
   
   // this data is hard coded. refactor to retrieve from GraphStore.jsx
 
-  update: function(data) {
+  updateData: function(data) {
     // update this.state's data
     var domain = [0, 30];
     this.setState({
@@ -46,9 +46,10 @@ var GraphView = React.createClass({
       // y: 50,
       // z: 10
     });
+    console.log('state data',this.state.data);
   },
 
-  _allData: /*GraphStore.nodeData*/dataGenerator.generate(GraphStore.nodeData.length),
+  _allData: /*GraphStore.nodeData*/dataGenerator.generate(/*this.state.data.length),*/GraphStore.nodeData.length),
 
   getData: function(domain) {
     return _.filter(this._allData, this.isInDomain.bind(null, domain));

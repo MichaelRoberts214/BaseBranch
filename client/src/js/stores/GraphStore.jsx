@@ -60,7 +60,7 @@ var GraphStore = Reflux.createStore({
     $.ajax({
       type: "GET",
       dataType: 'json',
-      url: 'http://localhost:8000/api/channel/nodes/1', //+ this.channelName, // localhost for local testing
+      url: 'http://localhost:8000/api/channel/nodes/' + this.channelName, // localhost for local testing
     }).then(function(data){
         this.nodeData = data; //push data to store
         for (var i = 0; i < this.nodeData.length; i++) {
@@ -68,6 +68,7 @@ var GraphStore = Reflux.createStore({
           this.nodeData[i].y = 10 * ( i + 1 );
           this.nodeData[i].z = 10;
         }
+        console.log('nodeData after load', this.nodeData);
         context.trigger(data);
     },function(error){
       console.log('Error on load\'s GET request');
