@@ -51,7 +51,6 @@ var GraphView = React.createClass({
       // y: 50,
       // z: 10
     });
-    console.log('state data',this.state.data);
   },
 
   _allData: dataGenerator.generate(GraphStore.nodeData.length),
@@ -88,7 +87,6 @@ var GraphView = React.createClass({
 
 
   render: function() {
-    console.log('state', this.state);
     return (
       <div className="left">
         <button onClick={this.openModal}>asdf</button>
