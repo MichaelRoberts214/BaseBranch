@@ -22,7 +22,14 @@ var ResourceListBox = React.createClass({
     });
   },
 
+  componentDidMount: function() {
+    this.unsubscribe = ResourceStore.listen(this.onChange);
+    console.log('CDM current state:', this.state);
+  },
 
+  componentWillUnmount: function() {
+    this.unsubscribe();
+  },
 
   onAdd: function(event) {
     event.preventDefault();
