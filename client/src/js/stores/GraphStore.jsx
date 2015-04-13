@@ -71,7 +71,6 @@ var GraphStore = Reflux.createStore({
         context.trigger(data);
     },function(error){
       console.log('Error on GraphStore.load\'s GET request');
-      console.log('error console.log:', error);
       console.error(error);
     });
   },

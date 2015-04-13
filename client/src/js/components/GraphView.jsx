@@ -99,8 +99,8 @@ var GraphView = React.createClass({
           addDatum={this.addDatum}
           removeDatum={this.removeDatum} />
         <Modal isOpen={this.state.modalIsOpen}>
-          <NodeView />
           <button onClick={this.closeModal} className="waves-effect waves-light btn">Close</button>
+          <NodeView />
         </Modal>
       </div>
     )

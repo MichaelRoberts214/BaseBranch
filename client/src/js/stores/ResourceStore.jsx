@@ -1,7 +1,7 @@
 var Reflux = require('reflux');
 var NodeResourceActions = require('../actions/NodeResourceActions.jsx');
 
-var _resources = []; //This is a private resources array
+  var _resources = [{name: 'asdf'},{name: "asdf2"}]; //This is a private resources array
 
 var ResourceStore = Reflux.createStore({
   nodeId: '1',
@@ -21,13 +21,12 @@ var ResourceStore = Reflux.createStore({
       dataType: 'json',
       url: 'http://localhost:8000/api/node/resources/' + this.nodeId, // localhost for local testing
     }).then(function(data){
-      console.log('this is the data:', data);
-      this._resources = data; //push data to store
-      console.log('these are the resources', this._resources);
+      console.log('a thing',data);
+      _resources = data; //push data to store
+      console.log('these are the resources', _resources);
       context.trigger(data);
     },function(error){
       console.log('Error on ResourceStore.load\'s GET request');
-      console.log('error console.log:', error);
       console.error(error);
     });
   },
