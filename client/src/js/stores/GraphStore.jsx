@@ -50,7 +50,6 @@ var GraphStore = Reflux.createStore({
   init: function(){
     this.load();
     this.listenTo(GraphActions.loadNodes, this.load);
-    this.listenTo(NodeResourceActions.setNodeId, this.load);
     // this.listenTo(GraphActions.addNode, this.XXXX);
     // this.listenTo(GraphActions.editNode, this.XXXX);
     // this.listenTo(GraphActions.updateNodes, this.XXXX);
