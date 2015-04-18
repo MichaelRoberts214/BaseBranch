@@ -173,17 +173,17 @@ ns._drawPoints = function(el, scales, data, prevScales) {
 
 //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-  var width = 960,
-      height = 500,
-      padding = 1.5, // separation between same-color nodes
-      clusterPadding = 6, // separation between different-color nodes
-      maxRadius = 12;
+  var width = 960;
+  var height = 500;
+  var padding = 1.5; // separation between same-color nodes
+  var clusterPadding = 6; // separation between different-color nodes
+  var maxRadius = 70;
 
 
-  // console.log('length',GraphStore.nodeData.length);
+  console.log('length',GraphStore.nodeData.length);
   // GraphStore.nodeData.length returns 0 here
-  var n = 4,//GraphStore.nodeData.length, // total number of nodes
-      m = 1; // number of distinct clusters
+  var n = 4;//GraphStore.nodeData.length, // total number of nodes
+  var m = 1; // number of distinct clusters
 
   var color = d3.scale.category20c()
       .domain(d3.range(m));
@@ -192,17 +192,19 @@ ns._drawPoints = function(el, scales, data, prevScales) {
   var clusters = new Array(m);
 
   var nodes = d3.range(n).map(function() {
-    var i = Math.floor(Math.random() * m), // cluster number
-        r = 20,//Math.sqrt((i + 1) / m * -Math.log(Math.random())) * maxRadius,
-        d = {cluster: i, radius: r/*, id: data*/};
+    var i = Math.floor(Math.random() * m); // cluster number
+    var r = 50;
+    var d = {cluster: i, radius: r/*, id: data*/};
     if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
     return d;
   });
 
   // put data into nodes
-  // console.log('data from d3', data);
-  // console.log('nodes', nodes);
   for (var i = 0; i < nodes.length; i++) {
+    if(i === 0) {
+      console.log('nodes[0]',i, nodes[i]);
+      nodes[i].radius = 70;
+    }
     nodes[i].id = data[i].id;
     nodes[i].channelId = data[i].channelId;
     nodes[i].name = data[i].name;
@@ -225,7 +227,7 @@ ns._drawPoints = function(el, scales, data, prevScales) {
       .nodes(nodes)
       .size([width, height])
       .gravity(.02)
-      .charge(0)
+      .charge(-10)
       .on("tick", tick)
       .start();
 
@@ -248,38 +250,17 @@ ns._drawPoints = function(el, scales, data, prevScales) {
 
   var g = d3.select(el).selectAll('.d3-points');
   var gt = d3.select(el).selectAll('.d3-texts');
-  // var point = g.selectAll('.d3-point')
-  //   .data(data, function(d) { return d.id; });
   var text = gt.selectAll('.d3-text');
-    //.data(data, function(d) { return d.id; });
 
-  // var nodeEnter = node.enter().append("g")
-  //   .attr("class", "node")
-  //   .on("click", click)
-  //   .call(force.drag);
-
-  // nodeEnter.append("circle")
-  //   .attr("r", function(d) { return Math.sqrt(d.size) / 10 || 4.5; });
-
-  // nodeEnter.append("text")
-  //     .attr("dy", ".35em")
-  //     .text(function(d) { return d.name; });
-
-  var node = g.selectAll(".d3-points") // changed from "circle"
+  var node = g.selectAll(".d3-points")
       .data(nodes)
-      // .data(data, function(d) { return d.id; })
       .enter().append("circle")
       .style("fill", function(d) { return color(d.cluster); }) // can just set the color here
       .call(force.drag);
 
   // Add text and link to circles
-  //text.enter().append("text")
-  //node.enter()
-
-  var texts = //g.selectAll(".d3-points")
-    text
+  var texts = text
     .data(nodes)
-    //.data(data, function(d) { return d.id; })
     .enter()
     .append("text")
     .attr("x", function(d) { return d.x; })
@@ -292,6 +273,7 @@ ns._drawPoints = function(el, scales, data, prevScales) {
     .attr("fill", "black")
     .attr("cursor", "pointer")
     .attr("id", function(d) {return d.id})
+    .style("text-anchor", "middle")
     .on("click", function(d) {
       NodeResourceActions.setNodeId(d.id);
     })
@@ -328,10 +310,10 @@ ns._drawPoints = function(el, scales, data, prevScales) {
     return function(d) {
       var cluster = clusters[d.cluster];
       if (cluster === d) return;
-      var x = d.x - cluster.x,
-          y = d.y - cluster.y,
-          l = Math.sqrt(x * x + y * y),
-          r = d.radius + cluster.radius;
+      var x = d.x - cluster.x;
+      var y = d.y - cluster.y;
+      var l = Math.sqrt(x * x + y * y);
+      var r = d.radius + cluster.radius;
       if (l != r) {
         l = (l - r) / l * alpha;
         d.x -= x *= l;
