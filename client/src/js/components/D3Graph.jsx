@@ -39,7 +39,6 @@ ns.create = function(el, props, state) {
 ns.update = function(el, state) {
   var scales = this._scales(el, state.domain);
   var prevScales = this._scales(el, state.prevDomain);
-  //this.destroy(el);
   this._drawPoints(el, scales, state.data, prevScales);
 };
 
@@ -71,10 +70,8 @@ ns._scales = function(el, domain) {
 };
 
 ns._drawPoints = function(el, scales, data, prevScales) {
-  console.log('el', el);
 
   this.destroy(el);
-  console.log('el after', el);
 
   // var g = d3.select(el).selectAll('.d3-points');
 
@@ -185,7 +182,7 @@ ns._drawPoints = function(el, scales, data, prevScales) {
 
   // console.log('length',GraphStore.nodeData.length);
   // GraphStore.nodeData.length returns 0 here
-  var n = 4,//GraphStore.nodeData.length, //200, // total number of nodes
+  var n = 4,//GraphStore.nodeData.length, // total number of nodes
       m = 1; // number of distinct clusters
 
   var color = d3.scale.category20c()
@@ -213,7 +210,7 @@ ns._drawPoints = function(el, scales, data, prevScales) {
     nodes[i].updatedAt = data[i].updatedAt;
   }
 
-  // Use the pack layout to initialize node positions.
+  // Use d3's pack layout to initialize node positions.
   d3.layout.pack()
       .sort(null)
       .size([width, height])
@@ -223,6 +220,7 @@ ns._drawPoints = function(el, scales, data, prevScales) {
         .key(function(d) { return d.cluster; })
         .entries(nodes)});
 
+  // Apply force to each node
   var force = d3.layout.force()
       .nodes(nodes)
       .size([width, height])
@@ -231,6 +229,7 @@ ns._drawPoints = function(el, scales, data, prevScales) {
       .on("tick", tick)
       .start();
 
+  // Old appended SVG
   // var svg = d3.select("body").append("svg")
   //     .attr("width", width)
   //     .attr("height", height);
@@ -266,10 +265,10 @@ ns._drawPoints = function(el, scales, data, prevScales) {
   //     .attr("dy", ".35em")
   //     .text(function(d) { return d.name; });
 
-  var node = /*sv*/g.selectAll(".d3-points") // changed from "circle"
+  var node = g.selectAll(".d3-points") // changed from "circle"
       .data(nodes)
       // .data(data, function(d) { return d.id; })
-    /*point*/.enter().append("circle")
+      .enter().append("circle")
       .style("fill", function(d) { return color(d.cluster); }) // can just set the color here
       .call(force.drag);
 
@@ -306,6 +305,10 @@ ns._drawPoints = function(el, scales, data, prevScales) {
         return function(t) { return d.radius = i(t); };
       });
 
+  texts.transition()
+      .duration(750)
+      .delay(function(d, i) { return i * 5; });
+
 
   function tick(e) {
     node
@@ -313,6 +316,11 @@ ns._drawPoints = function(el, scales, data, prevScales) {
         .each(collide(.5))
         .attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
+    texts
+        .each(cluster(10 * e.alpha * e.alpha))
+        .each(collide(.5))
+        .attr("x", function(d) { return d.x; })
+        .attr("y", function(d) { return d.y; });
   }
 
   // Move d to be adjacent to the cluster node.
