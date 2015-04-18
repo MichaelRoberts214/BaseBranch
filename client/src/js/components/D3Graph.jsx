@@ -39,7 +39,7 @@ ns.create = function(el, props, state) {
 ns.update = function(el, state) {
   var scales = this._scales(el, state.domain);
   var prevScales = this._scales(el, state.prevDomain);
-  this.destroy(el);
+  //this.destroy(el);
   this._drawPoints(el, scales, state.data, prevScales);
 };
 
@@ -72,6 +72,10 @@ ns._scales = function(el, domain) {
 
 ns._drawPoints = function(el, scales, data, prevScales) {
   console.log('el', el);
+
+  this.destroy(el);
+  console.log('el after', el);
+
   // var g = d3.select(el).selectAll('.d3-points');
 
   // var gt = d3.select(el).selectAll('.d3-texts');
@@ -189,7 +193,6 @@ ns._drawPoints = function(el, scales, data, prevScales) {
 
   // The largest node for each cluster.
   var clusters = new Array(m);
-
 
   var nodes = d3.range(n).map(function() {
     var i = Math.floor(Math.random() * m), // cluster number
@@ -368,6 +371,8 @@ ns._drawPoints = function(el, scales, data, prevScales) {
 ns.destroy = function(el) {
   d3.select(el).selectAll(".d3-point").remove();
   d3.select(el).selectAll(".d3-texts").remove();
+  d3.select(el).selectAll("g").remove();
+  d3.select(el).selectAll("svg").remove();
 };
 
 module.exports = ns;
